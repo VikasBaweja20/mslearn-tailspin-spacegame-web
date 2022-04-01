@@ -13,10 +13,11 @@ variables:
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '5.x'
+  buildDirectory: $(Build.SourcesDirectory)
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+  displayName: 'Use .NET SDK $(dotnetSdkVersion) and $(buildDirectory)'
   inputs:
     version: '$(dotnetSdkVersion)'
 
@@ -68,7 +69,7 @@ steps:
   inputs:
     command: custom
     custom: tool
-    arguments: 'run reportgenerator -reports:$(buildConfiguration)/TestResults/Coverage/coverage.cobertura.xml -targetdir:$(buildConfiguration)/TestResults/Coverage/ -reporttypes:HtmlInline_AzurePipelines'
+    arguments: 'run reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(buildConfiguration)/TestResults/Coverage/ -reporttypes:HtmlInline_AzurePipelines'
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
